@@ -13,7 +13,7 @@ func versionCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "version",
 		Short:   "Version of Harbor CLI",
-		Long:    `Get Harbor CLI version, git commit, go version, build time, release channel, os/arch, etc.`,
+		Long:    `Gese channel, os/arch, etc.`,
 		Example: `  harbor version`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runVersion()
