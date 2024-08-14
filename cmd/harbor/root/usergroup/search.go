@@ -6,13 +6,13 @@ import (
     "os"
     "strings"
  
-
+    search "github.com/goharbor/harbor-cli/pkg/views/usergroup/search"
     "github.com/goharbor/harbor-cli/pkg/api"
     log "github.com/sirupsen/logrus"
     "github.com/spf13/cobra"
 )
 
-func UserGroupsSearchCmd() *cobra.Command {
+func UserGroupsSearchCommand() *cobra.Command {
     var groupName string
 
     cmd := &cobra.Command{
@@ -30,8 +30,7 @@ func UserGroupsSearchCmd() *cobra.Command {
                 input, _ := reader.ReadString('\n')
                 groupName = strings.TrimSpace(input)
             }
-            // Clear the previous message
-            fmt.Print("\033[K") // ANSI escape code to clear the line
+            fmt.Print("\033[K") 
 
             fmt.Printf("Searching for groups with name '%s'...\r", groupName)
             response, err := api.SearchUserGroups(groupName)
@@ -46,9 +45,7 @@ func UserGroupsSearchCmd() *cobra.Command {
                 return
             }
 
-            for _, group := range response.Payload {
-                log.Infof("ID: %d, Name: %s, Type: %d", group.ID, group.GroupName, group.GroupType)
-            }
+            search.DisplayUserGroupSearchResults(response)
  
         },
     }

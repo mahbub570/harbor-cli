@@ -10,9 +10,10 @@ import (
     "github.com/goharbor/harbor-cli/pkg/api"
     log "github.com/sirupsen/logrus"
     "github.com/spf13/cobra"
+     get "github.com/goharbor/harbor-cli/pkg/views/usergroup/get"
 )
 
-func UserGroupGetCmd() *cobra.Command {
+func UserGroupGetCommand() *cobra.Command {
     cmd := &cobra.Command{
         Use:   "get [groupID]",
         Short: "get user group details",
@@ -49,8 +50,7 @@ func UserGroupGetCmd() *cobra.Command {
                 return
             }
 
-            group := response.Payload
-            log.Infof("ID: %d, Name: %s, Type: %d", group.ID, group.GroupName, group.GroupType)
+            get.DisplayUserGroup(response.Payload)
         },
     }
 

@@ -12,7 +12,7 @@ import (
     "github.com/spf13/cobra"
 )
 
-func UserGroupDeleteCmd() *cobra.Command {
+func UserGroupDeleteCommand() *cobra.Command {
     cmd := &cobra.Command{
         Use:   "delete [groupID]",
         Short: "delete user group",
@@ -20,9 +20,6 @@ func UserGroupDeleteCmd() *cobra.Command {
         Run: func(cmd *cobra.Command, args []string) {
             var groupId int64
             var err error
-
-            // Print the delete command message
-            fmt.Printf("Running delete command...\r")
 
             if len(args) == 0 {
                 fmt.Print("Enter group ID: ")
@@ -41,8 +38,6 @@ func UserGroupDeleteCmd() *cobra.Command {
                     return
                 }
             }
-
-            // Check if the group ID exists
             response, err := api.ListUserGroups()
             if err != nil {
                 log.Errorf("failed to list user groups: %v", err)
@@ -66,9 +61,7 @@ func UserGroupDeleteCmd() *cobra.Command {
             if err != nil {
                 log.Errorf("failed to delete user group: %v", err)
             }
-
-            // Clear the previous message
-            fmt.Print("\033[K") // ANSI escape code to clear the line
+            fmt.Print("\033[K") 
 
         },
     }

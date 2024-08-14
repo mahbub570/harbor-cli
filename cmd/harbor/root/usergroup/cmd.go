@@ -13,12 +13,12 @@ func Usergroup() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		UserGroupCreatecmd(),
-		UserGroupsListCmd(),
-		UserGroupDeleteCmd(),
-		UserGroupsSearchCmd(),
-		UserGroupUpdateCmd(),
-		UserGroupGetCmd(),
+		UserGroupCreateCommand(),
+		UserGroupsListCommand(),
+		UserGroupDeleteCommand(),
+		UserGroupsSearchCommand(),
+		UserGroupUpdateCommand(),
+		UserGroupGetCommand(),
 
 	)
 

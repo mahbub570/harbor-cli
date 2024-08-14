@@ -46,8 +46,6 @@ func CreateUserGroup(groupName string, groupType int64, ldapGroupDn string) erro
 
 }
 
-
-
 func DeleteUserGroup(groupId int64) error {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
@@ -121,7 +119,5 @@ func UpdateUserGroup(groupId int64, groupName string, groupType int64) error {
 	if err != nil {
 		return err
 	}
-
-	log.Infof("User group `%s` updated successfully", groupName)
 	return nil
 }
