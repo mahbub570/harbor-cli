@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 	"sync"
+"net/http"
 
+	"github.com/go-openapi/runtime"
 	"github.com/goharbor/go-client/pkg/harbor"
 	v2client "github.com/goharbor/go-client/pkg/sdk/v2.0/client"
 	log "github.com/sirupsen/logrus"
@@ -59,4 +61,17 @@ func GetClientByCredentialName(credentialName string) *v2client.HarborAPI {
 		Password: credential.Password,
 	}
 	return GetClientByConfig(clientConfig)
+}
+
+// IsNotFoundError checks if the error represents a 404 Not Found response
+func IsNotFoundError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if apiErr, ok := err.(*runtime.APIError); ok {
+		return apiErr.Code == http.StatusNotFound
+	}
+
+	return false
 }
