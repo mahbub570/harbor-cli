@@ -12,7 +12,7 @@ import (
 
 
 
-/// baikka comment
+/// baikka comment 2
 
 
 var columns = []table.Column{
