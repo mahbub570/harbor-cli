@@ -1,24 +1,24 @@
 package api
 
 import (
+	"encoding/json"
 	"github.com/goharbor/go-client/pkg/sdk/v2.0/client/securityhub"
 	"github.com/goharbor/harbor-cli/pkg/utils"
 )
 
-func GetSecuritySummary() error {
+func GetSecuritySummary() ([]byte, error) {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	params := &securityhub.GetSecuritySummaryParams{}
 	response, err := client.Securityhub.GetSecuritySummary(ctx, params)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	utils.PrintPayloadInJSONFormat(response.Payload)
-	return nil
+	return json.Marshal(response.Payload)
 }
 
 func ListVulnerabilities(query string) error {
