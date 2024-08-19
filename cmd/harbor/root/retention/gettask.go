@@ -36,3 +36,4 @@ func newGetTaskLogCmd() *cobra.Command {
 
 	return cmd
 }
+// ./harbor retention get-task-log --id 1 --execution-id 2 --task-id 1

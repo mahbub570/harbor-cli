@@ -40,28 +40,40 @@ func (h *RetentionHandler) CreateRetentionPolicy(ctx context.Context, policy *mo
     return nil
 }
 
+// GetRetentionPolicy retrieves a retention policy by ID
+func (h *RetentionHandler) GetRetentionPolicy(ctx context.Context, id int64) (*models.RetentionPolicy, error) {
+    client, err := utils.GetClient()
+    if err != nil {
+        return nil, fmt.Errorf("failed to get client: %v", err)
+    }
+
+    params := retention.NewGetRetentionParams().WithID(id)
+    resp, err := client.Retention.GetRetention(ctx, params)
+    if err != nil {
+        switch e := err.(type) {
+        // case *retention.GetRetentionNotFound:
+        //     return nil, fmt.Errorf("retention policy not found: %s", formatErrors(e.Payload.Errors))
+        case *retention.GetRetentionUnauthorized:
+            return nil, fmt.Errorf("unauthorized: %s", formatErrors(e.Payload.Errors))
+        case *retention.GetRetentionForbidden:
+            return nil, fmt.Errorf("forbidden: %s", formatErrors(e.Payload.Errors))
+        case *retention.GetRetentionInternalServerError:
+            return nil, fmt.Errorf("internal server error: %s", formatErrors(e.Payload.Errors))
+        default:
+            return nil, fmt.Errorf("failed to get retention policy: %v", err)
+        }
+    }
+
+    return resp.Payload, nil
+}
+
+// Helper function to format error messages
 func formatErrors(errors []*models.Error) string {
     var errMsgs []string
     for _, err := range errors {
         errMsgs = append(errMsgs, fmt.Sprintf("%s: %s", err.Code, err.Message))
     }
     return strings.Join(errMsgs, "; ")
-}
-
-// GetRetentionPolicy retrieves a retention policy by ID
-func (h *RetentionHandler) GetRetentionPolicy(ctx context.Context, id int64) (*models.RetentionPolicy, error) {
-	client, err := utils.GetClient()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get client: %v", err)
-	}
-
-	params := retention.NewGetRetentionParams().WithID(id)
-	resp, err := client.Retention.GetRetention(ctx, params)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get retention policy: %v", err)
-	}
-
-	return resp.Payload, nil
 }
 
 // UpdateRetentionPolicy updates an existing retention policy

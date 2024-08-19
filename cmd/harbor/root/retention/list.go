@@ -35,3 +35,4 @@ func newListExecutionsCmd() *cobra.Command {
 
 	return cmd
 }
+// ./harbor retention list-executions --id 0
