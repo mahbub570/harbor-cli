@@ -57,3 +57,57 @@ func DisplaySecuritySummary(summaryData *SecuritySummary) {
 		os.Exit(1)
 	}
 }
+
+func DisplayVulnerabilities(vulnerabilities []Vulnerability) {
+	columns := []table.Column{
+		{Title: "CVE ID", Width: 20},
+		{Title: "Severity", Width: 12},
+		{Title: "Package", Width: 20},
+		{Title: "Current Version", Width: 15},
+		{Title: "Fixed Version", Width: 15},
+		{Title: "CVSS Score", Width: 10},
+	}
+
+	var rows []table.Row
+	for _, vuln := range vulnerabilities {
+		rows = append(rows, table.Row{
+			vuln.CVEID,
+			colorizeVulnerability(vuln.Severity),
+			vuln.Package,
+			vuln.Version,
+			vuln.FixedVersion,
+			fmt.Sprintf("%.1f", vuln.CVSSScore),
+		})
+	}
+
+	m := tablelist.NewModel(columns, rows, len(rows))
+
+	if _, err := tea.NewProgram(m).Run(); err != nil {
+		fmt.Printf("Error running program: %v\n", err)
+		os.Exit(1)
+	}
+}
+
+func colorizeVulnerability(severity string) string {
+	switch severity {
+	case "Critical":
+		return fmt.Sprintf("%s%s%s", colors["red"], severity, colors["reset"])
+	case "High":
+		return fmt.Sprintf("%s%s%s", colors["purple"], severity, colors["reset"])
+	case "Medium":
+		return fmt.Sprintf("%s%s%s", colors["yellow"], severity, colors["reset"])
+	case "Low":
+		return fmt.Sprintf("%s%s%s", colors["blue"], severity, colors["reset"])
+	default:
+		return severity
+	}
+}
+
+type Vulnerability struct {
+	CVEID        string
+	Severity     string
+	Package      string
+	Version      string
+	FixedVersion string
+	CVSSScore    float64
+}

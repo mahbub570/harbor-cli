@@ -21,10 +21,10 @@ func GetSecuritySummary() ([]byte, error) {
 	return json.Marshal(response.Payload)
 }
 
-func ListVulnerabilities(query string) error {
+func ListVulnerabilities(query string) ([]byte, error) {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	params := &securityhub.ListVulnerabilitiesParams{
@@ -33,9 +33,8 @@ func ListVulnerabilities(query string) error {
 
 	response, err := client.Securityhub.ListVulnerabilities(ctx, params)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	utils.PrintPayloadInJSONFormat(response.Payload)
-	return nil
+	return json.Marshal(response.Payload)
 }
