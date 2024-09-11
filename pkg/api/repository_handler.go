@@ -21,8 +21,7 @@ func RepoDelete(projectName, repoName string) error {
 	return nil
 }
 
-func RepoInfo(projectName, repoName string) error {
-	ctx, client, err := utils.ContextWithClient()
+func RepoInfo(projectName 
 	if err != nil {
 		return err
 	}
